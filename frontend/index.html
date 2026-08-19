@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Cloud Backup Platform</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f4f4f4;
+            color: #222;
+        }
+
+        header {
+            background: #2f2f2f;
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 30px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .clouds {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .cloud {
+            flex: 1;
+            min-width: 180px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .status {
+            color: green;
+            font-weight: bold;
+        }
+
+        button {
+            padding: 10px 18px;
+            border: none;
+            background: #333;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        footer {
+            background: #2f2f2f;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Multi-Cloud Backup Platform</h1>
+    <p>Disaster Recovery and Business Continuity</p>
+</header>
+
+<div class="container">
+
+    <div class="card">
+        <h2>Backup Dashboard</h2>
+        <p>Monitor backup and recovery status across multiple cloud platforms.</p>
+        <button onclick="checkHealth()">Check System Health</button>
+        <p id="health"></p>
+    </div>
+
+    <div class="card">
+        <h2>Cloud Backup Status</h2>
+
+        <div class="clouds">
+
+            <div class="cloud">
+                <h3>AWS</h3>
+                <p class="status">✓ Backup Completed</p>
+            </div>
+
+            <div class="cloud">
+                <h3>Azure</h3>
+                <p class="status">✓ Backup Completed</p>
+            </div>
+
+            <div class="cloud">
+                <h3>Google Cloud</h3>
+                <p class="status">✓ Backup Completed</p>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Disaster Recovery</h2>
+        <p>Recovery readiness: <strong>Ready</strong></p>
+        <p>Business continuity status: <strong>Active</strong></p>
+    </div>
+
+</div>
+
+<footer>
+    Multi-Cloud Backup, Disaster Recovery and Business Continuity Platform
+</footer>
+
+<script>
+    async function checkHealth() {
+        try {
+            const response = await fetch("http://localhost:5000/health");
+            const data = await response.json();
+
+            document.getElementById("health").innerText =
+                "System Status: " + data.status;
+        } catch (error) {
+            document.getElementById("health").innerText =
+                "Backend is not running";
+        }
+    }
+</script>
+
+</body>
+</html>

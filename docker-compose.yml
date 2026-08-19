@@ -1,0 +1,31 @@
+services:
+
+  api:
+    build: .
+    container_name: multicloud-backup-api
+    command: python backend/app.py
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+
+  orchestrator:
+    build: .
+    container_name: backup-orchestrator
+    command: python backend/orchestrator.py
+
+  db:
+    image: postgres:16
+    container_name: multicloud-backup-db
+    environment:
+      POSTGRES_DB: backupdb
+      POSTGRES_USER: backupuser
+      POSTGRES_PASSWORD: backuppass
+    ports:
+      - "5432:5432"
+    volumes:
+      - backup_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  backup_data:
