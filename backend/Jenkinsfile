@@ -1,0 +1,39 @@
+pipeline {
+    agent any
+
+    environment {
+        CONTAINER_NAME = 'mc-backup-instance'
+        IMAGE_NAME     = 'mc-backup-platform'
+        IMAGE_TAG      = '1.0'
+        PROD_PORT      = '5000'
+    }
+
+    stages {
+        stage('1. SCM Source Checkout') {
+            steps {
+                echo 'Pulling latest project blueprints from your GitHub repository...'
+                // Jenkins automatically pulls your code here
+                checkout scm
+            }
+        }
+
+        stage('2. Build Isolated Docker Image') {
+            steps {
+                echo 'Packaging full-stack application environment into a Docker image...'
+                bat "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+            }
+        }
+
+        stage('3. Run Active Container Platform') {
+            steps {
+                echo 'Cleaning up old instances to prevent port allocation crashes...'
+                bat "docker stop ${CONTAINER_NAME} || exit 0"
+                bat "docker rm ${CONTAINER_NAME} || exit 0"
+
+                echo 'Launching Multi-Cloud Backup Platform container...'
+                bat "docker run -d --name ${CONTAINER_NAME} -p ${PROD_PORT}:${PROD_PORT} ${IMAGE_NAME}:${IMAGE_TAG}"
+                echo 'Platform successfully deployed to host runtime environment!'
+            }
+        }
+    }
+}
