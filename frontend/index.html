@@ -1,143 +1,1831 @@
-<!DOCTYPE html>
+<<<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Multi-Cloud Backup Platform</title>
 
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            background: #f4f4f4;
-            color: #222;
+
+        * {
+            box-sizing: border-box;
         }
 
-        header {
-            background: #2f2f2f;
-            color: white;
-            text-align: center;
-            padding: 30px;
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #eef2f7;
+            color: #1f2937;
         }
+
+        /* ================= HEADER ================= */
+
+        header {
+            background: linear-gradient(135deg, #111827, #26364d);
+            color: white;
+            padding: 30px 6%;
+        }
+
+        header h1 {
+            margin: 0 0 8px;
+            font-size: 30px;
+        }
+
+        header p {
+            margin: 0;
+            color: #cbd5e1;
+        }
+
+        /* ================= CONTAINER ================= */
 
         .container {
             width: 90%;
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 30px auto;
         }
 
+        /* ================= CARD ================= */
+
         .card {
             background: white;
+            border-radius: 14px;
             padding: 25px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 22px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
         }
 
-        .clouds {
-            display: flex;
+        .card h2 {
+            margin-top: 0;
+            color: #172033;
+        }
+
+        /* ================= BUTTONS ================= */
+
+        button {
+            border: none;
+            border-radius: 8px;
+            padding: 12px 18px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 5px;
+            font-size: 14px;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+        }
+
+        .primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .primary:hover {
+            background: #1d4ed8;
+        }
+
+        .secondary {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        .success {
+            background: #16a34a;
+            color: white;
+        }
+
+        .danger {
+            background: #dc2626;
+            color: white;
+        }
+
+        /* ================= HEALTH ================= */
+
+        .health {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            background: #f1f5f9;
+        }
+
+        .health-success {
+            background: #ecfdf5;
+            color: #166534;
+            border: 1px solid #86efac;
+        }
+
+        .health-error {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
+        /* ================= BACKUP CONFIGURATION ================= */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
             gap: 20px;
-            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #374151;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 15px;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.12);
+        }
+
+        .configuration-success {
+            background: #ecfdf5;
+            border: 1px solid #86efac;
+            color: #166534;
+        }
+
+        .configuration-error {
+            background: #fef2f2;
+            border: 1px solid #fca5a5;
+            color: #991b1b;
+        }
+
+        /* ================= CLOUD BACKUP ================= */
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
         }
 
         .cloud {
-            flex: 1;
-            min-width: 180px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
             padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .cloud:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+        }
+
+        .cloud.selected {
+            border-color: #2563eb;
+            background: #eff6ff;
+        }
+
+        .cloud h3 {
+            margin-top: 0;
+            font-size: 21px;
         }
 
         .status {
-            color: green;
             font-weight: bold;
+            color: #16a34a;
         }
 
-        button {
-            padding: 10px 18px;
-            border: none;
-            background: #333;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
+        .cloud small {
+            color: #64748b;
         }
+
+        /* ================= PROGRESS ================= */
+
+        .progress-box {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .progress {
+            width: 100%;
+            height: 14px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: #2563eb;
+            transition: width 0.4s;
+        }
+
+        /* ================= STATISTICS ================= */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .stat {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat strong {
+            display: block;
+            font-size: 28px;
+            margin-top: 8px;
+        }
+
+        /* ================= RECOVERY ================= */
+
+        .recovery-box {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+
+        .recovery-status {
+            font-size: 20px;
+            font-weight: bold;
+            color: #16a34a;
+        }
+
+        /* ================= ACTIVITY ================= */
+
+        .activity {
+            max-height: 280px;
+            overflow-y: auto;
+        }
+
+        .activity-item {
+            padding: 14px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 9px;
+            border-radius: 20px;
+            background: #dcfce7;
+            color: #166534;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .info-badge {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        /* ================= NOTIFICATION ================= */
+
+        .notification {
+            position: fixed;
+            right: 25px;
+            top: 25px;
+            background: #111827;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* ================= FOOTER ================= */
 
         footer {
-            background: #2f2f2f;
+            background: #111827;
             color: white;
             text-align: center;
-            padding: 20px;
-            margin-top: 30px;
+            padding: 25px;
+            margin-top: 40px;
         }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 800px) {
+
+            .grid,
+            .form-grid,
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                width: 94%;
+            }
+
+        }
+
     </style>
+
 </head>
+
 
 <body>
 
-<header>
-    <h1>Multi-Cloud Backup Platform</h1>
-    <p>Disaster Recovery and Business Continuity</p>
-</header>
+    <!-- ================= HEADER ================= -->
 
-<div class="container">
+    <header>
 
-    <div class="card">
-        <h2>Backup Dashboard</h2>
-        <p>Monitor backup and recovery status across multiple cloud platforms.</p>
-        <button onclick="checkHealth()">Check System Health</button>
-        <p id="health"></p>
-    </div>
+        <h1>☁ Multi-Cloud Backup Platform</h1>
 
-    <div class="card">
-        <h2>Cloud Backup Status</h2>
+        <p>
+            Disaster Recovery & Business Continuity Management System
+        </p>
 
-        <div class="clouds">
+    </header>
 
-            <div class="cloud">
-                <h3>AWS</h3>
-                <p class="status">✓ Backup Completed</p>
-            </div>
 
-            <div class="cloud">
-                <h3>Azure</h3>
-                <p class="status">✓ Backup Completed</p>
-            </div>
+    <div class="container">
 
-            <div class="cloud">
-                <h3>Google Cloud</h3>
-                <p class="status">✓ Backup Completed</p>
+
+        <!-- =====================================================
+             SYSTEM DASHBOARD
+        ====================================================== -->
+
+        <div class="card">
+
+            <h2>📊 Backup Dashboard</h2>
+
+            <p>
+                Monitor backup and recovery status across multiple
+                cloud platforms.
+            </p>
+
+
+            <button
+                class="primary"
+                onclick="checkHealth()">
+
+                ❤️ Check System Health
+
+            </button>
+
+
+            <button
+                class="secondary"
+                onclick="refreshDashboard()">
+
+                🔄 Refresh Status
+
+            </button>
+
+
+            <div
+                id="health"
+                class="health">
+
+                System status not checked yet.
+
             </div>
 
         </div>
+
+
+        <!-- =====================================================
+             BACKUP CONFIGURATION FORM
+        ====================================================== -->
+
+        <div class="card">
+
+            <h2>⚙ Backup Configuration</h2>
+
+            <p>
+                Configure your backup before starting the operation.
+            </p>
+
+
+            <div class="form-grid">
+
+
+                <!-- ORGANIZATION -->
+
+                <div class="form-group">
+
+                    <label>
+                        👤 Organization Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="organization"
+                        placeholder="Enter organization name">
+
+                </div>
+
+
+                <!-- BACKUP SOURCE -->
+
+                <div class="form-group">
+
+                    <label>
+                        📁 Backup Source
+                    </label>
+
+                    <input
+                        type="text"
+                        id="backupSource"
+                        placeholder="Example: Customer Database">
+
+                </div>
+
+
+                <!-- PRIMARY CLOUD -->
+
+                <div class="form-group">
+
+                    <label>
+                        ☁ Primary Cloud
+                    </label>
+
+                    <select id="primaryCloud">
+
+                        <option value="AWS">
+                            AWS
+                        </option>
+
+                        <option value="Azure">
+                            Azure
+                        </option>
+
+                        <option value="Google Cloud">
+                            Google Cloud
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- SECONDARY CLOUD -->
+
+                <div class="form-group">
+
+                    <label>
+                        ☁ Secondary Cloud
+                    </label>
+
+                    <select id="secondaryCloud">
+
+                        <option value="Azure">
+                            Azure
+                        </option>
+
+                        <option value="AWS">
+                            AWS
+                        </option>
+
+                        <option value="Google Cloud">
+                            Google Cloud
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- BACKUP TYPE -->
+
+                <div class="form-group">
+
+                    <label>
+                        💾 Backup Type
+                    </label>
+
+                    <select id="backupType">
+
+                        <option value="Full Backup">
+                            Full Backup
+                        </option>
+
+                        <option value="Incremental Backup">
+                            Incremental Backup
+                        </option>
+
+                        <option value="Differential Backup">
+                            Differential Backup
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- SCHEDULE -->
+
+                <div class="form-group">
+
+                    <label>
+                        🗓 Backup Schedule
+                    </label>
+
+                    <select id="schedule">
+
+                        <option value="Daily">
+                            Daily
+                        </option>
+
+                        <option value="Weekly">
+                            Weekly
+                        </option>
+
+                        <option value="Monthly">
+                            Monthly
+                        </option>
+
+                        <option value="Manual">
+                            Manual
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- ENCRYPTION -->
+
+                <div class="form-group">
+
+                    <label>
+                        🔐 Encryption
+                    </label>
+
+                    <select id="encryption">
+
+                        <option value="Enabled">
+                            Enabled
+                        </option>
+
+                        <option value="Disabled">
+                            Disabled
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- RETENTION -->
+
+                <div class="form-group">
+
+                    <label>
+                        🗄 Retention Period
+                    </label>
+
+                    <select id="retention">
+
+                        <option value="7 Days">
+                            7 Days
+                        </option>
+
+                        <option value="30 Days">
+                            30 Days
+                        </option>
+
+                        <option value="90 Days">
+                            90 Days
+                        </option>
+
+                        <option value="1 Year">
+                            1 Year
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div style="margin-top:25px;">
+
+                <button
+                    class="primary"
+                    onclick="startConfiguredBackup()">
+
+                    🚀 START BACKUP
+
+                </button>
+
+
+                <button
+                    class="secondary"
+                    onclick="resetConfiguration()">
+
+                    ↻ RESET
+
+                </button>
+
+            </div>
+
+
+            <!-- CONFIGURATION RESULT -->
+
+            <div
+                id="configurationResult"
+                class="health"
+                style="display:none;">
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             CLOUD BACKUP STATUS
+        ====================================================== -->
+
+        <div class="card">
+
+            <h2>☁ Cloud Backup Status</h2>
+
+
+            <div class="grid">
+
+
+                <!-- AWS -->
+
+                <div
+                    class="cloud"
+                    id="AWS"
+                    onclick="selectCloud('AWS')">
+
+                    <h3>☁ AWS</h3>
+
+                    <p
+                        class="status"
+                        id="AWS-status">
+
+                        ✓ Backup Completed
+
+                    </p>
+
+                    <small id="AWS-time">
+
+                        Last backup: Today
+
+                    </small>
+
+                </div>
+
+
+                <!-- AZURE -->
+
+                <div
+                    class="cloud"
+                    id="Azure"
+                    onclick="selectCloud('Azure')">
+
+                    <h3>☁ Azure</h3>
+
+                    <p
+                        class="status"
+                        id="Azure-status">
+
+                        ✓ Backup Completed
+
+                    </p>
+
+                    <small id="Azure-time">
+
+                        Last backup: Today
+
+                    </small>
+
+                </div>
+
+
+                <!-- GOOGLE CLOUD -->
+
+                <div
+                    class="cloud"
+                    id="GoogleCloud"
+                    onclick="selectCloud('Google Cloud')">
+
+                    <h3>☁ Google Cloud</h3>
+
+                    <p
+                        class="status"
+                        id="GoogleCloud-status">
+
+                        ✓ Backup Completed
+
+                    </p>
+
+                    <small id="GoogleCloud-time">
+
+                        Last backup: Today
+
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <br>
+
+
+            <p>
+
+                Selected cloud:
+
+                <strong id="selectedCloud">
+                    None
+                </strong>
+
+            </p>
+
+
+            <button
+                class="primary"
+                onclick="runBackup()">
+
+                ▶ Run Backup
+
+            </button>
+
+
+            <button
+                class="success"
+                onclick="runAllBackups()">
+
+                ☁ Backup All Clouds
+
+            </button>
+
+
+            <!-- PROGRESS -->
+
+            <div
+                class="progress-box"
+                id="progressBox">
+
+                <p id="progressText">
+
+                    Starting backup...
+
+                </p>
+
+
+                <div class="progress">
+
+                    <div
+                        class="progress-bar"
+                        id="progressBar">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             BACKUP STATISTICS
+        ====================================================== -->
+
+        <div class="card">
+
+            <h2>📊 Backup Statistics</h2>
+
+
+            <div class="stats">
+
+
+                <div class="stat">
+
+                    Total Clouds
+
+                    <strong>
+                        3
+                    </strong>
+
+                </div>
+
+
+                <div class="stat">
+
+                    Completed
+
+                    <strong id="completedCount">
+                        3
+                    </strong>
+
+                </div>
+
+
+                <div class="stat">
+
+                    Recovery
+
+                    <strong>
+                        Ready
+                    </strong>
+
+                </div>
+
+
+                <div class="stat">
+
+                    Continuity
+
+                    <strong>
+                        Active
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             DISASTER RECOVERY
+        ====================================================== -->
+
+        <div class="card">
+
+            <h2>♻ Disaster Recovery</h2>
+
+
+            <div class="recovery-box">
+
+                <p>
+
+                    Recovery readiness:
+
+                    <span
+                        id="recoveryStatus"
+                        class="recovery-status">
+
+                        Ready
+
+                    </span>
+
+                </p>
+
+
+                <p>
+
+                    Business continuity:
+
+                    <strong class="status">
+
+                        Active
+
+                    </strong>
+
+                </p>
+
+
+                <button
+                    class="danger"
+                    onclick="testRecovery()">
+
+                    ♻ Test Disaster Recovery
+
+                </button>
+
+
+                <p id="recoveryMessage">
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             RECENT ACTIVITY
+        ====================================================== -->
+
+        <div class="card">
+
+            <h2>📋 Recent Activity</h2>
+
+
+            <div
+                id="activity"
+                class="activity">
+
+
+                <div class="activity-item">
+
+                    <span class="badge">
+                        SUCCESS
+                    </span>
+
+                    AWS backup completed
+
+                </div>
+
+
+                <div class="activity-item">
+
+                    <span class="badge">
+                        SUCCESS
+                    </span>
+
+                    Azure backup completed
+
+                </div>
+
+
+                <div class="activity-item">
+
+                    <span class="badge">
+                        SUCCESS
+                    </span>
+
+                    Google Cloud backup completed
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
 
-    <div class="card">
-        <h2>Disaster Recovery</h2>
-        <p>Recovery readiness: <strong>Ready</strong></p>
-        <p>Business continuity status: <strong>Active</strong></p>
+
+    <!-- =====================================================
+         NOTIFICATION
+    ====================================================== -->
+
+    <div
+        id="notification"
+        class="notification">
+
     </div>
 
-</div>
 
-<footer>
-    Multi-Cloud Backup, Disaster Recovery and Business Continuity Platform
-</footer>
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
 
-<script>
-    async function checkHealth() {
-        try {
-            const response = await fetch("http://localhost:5000/health");
-            const data = await response.json();
+    <footer>
 
-            document.getElementById("health").innerText =
-                "System Status: " + data.status;
-        } catch (error) {
-            document.getElementById("health").innerText =
-                "Backend is not running";
+        Multi-Cloud Backup, Disaster Recovery
+        and Business Continuity Platform
+
+    </footer>
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script>
+
+
+        /* =====================================================
+           VARIABLES
+        ====================================================== */
+
+        const API = "http://localhost:5000";
+
+        let selectedCloud = null;
+
+
+        /* =====================================================
+           CHECK SYSTEM HEALTH
+        ====================================================== */
+
+        async function checkHealth() {
+
+            const health =
+                document.getElementById("health");
+
+
+            health.className = "health";
+
+            health.innerHTML =
+                "⏳ Checking system health...";
+
+
+            try {
+
+                const response =
+                    await fetch(API + "/health");
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Backend error"
+                    );
+
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                health.className =
+                    "health health-success";
+
+
+                health.innerHTML =
+                    "🟢 System Status: <strong>"
+                    + data.status
+                    + "</strong>";
+
+
+                showNotification(
+                    "System is healthy"
+                );
+
+
+            } catch (error) {
+
+                health.className =
+                    "health health-error";
+
+
+                health.innerHTML =
+                    "🔴 Backend is not reachable.";
+
+
+                showNotification(
+                    "Backend connection failed"
+                );
+
+            }
+
         }
-    }
-</script>
+
+
+        /* =====================================================
+           SELECT CLOUD
+        ====================================================== */
+
+        function selectCloud(cloud) {
+
+
+            document
+                .querySelectorAll(".cloud")
+                .forEach(card => {
+
+                    card.classList.remove(
+                        "selected"
+                    );
+
+                });
+
+
+            let elementId = cloud;
+
+
+            if (cloud === "Google Cloud") {
+
+                elementId = "GoogleCloud";
+
+            }
+
+
+            document
+                .getElementById(elementId)
+                .classList.add("selected");
+
+
+            selectedCloud = cloud;
+
+
+            document
+                .getElementById("selectedCloud")
+                .innerText = cloud;
+
+
+            showNotification(
+                cloud + " selected"
+            );
+
+        }
+
+
+        /* =====================================================
+           RUN SINGLE BACKUP
+        ====================================================== */
+
+        function runBackup() {
+
+
+            if (!selectedCloud) {
+
+                showNotification(
+                    "Please select a cloud first"
+                );
+
+                return;
+
+            }
+
+
+            performBackup(
+                selectedCloud
+            );
+
+        }
+
+
+        /* =====================================================
+           RUN ALL CLOUD BACKUPS
+        ====================================================== */
+
+        function runAllBackups() {
+
+            performBackup(
+                "All Clouds"
+            );
+
+        }
+
+
+        /* =====================================================
+           BACKUP PROCESS
+        ====================================================== */
+
+        function performBackup(cloud) {
+
+
+            const box =
+                document.getElementById(
+                    "progressBox"
+                );
+
+
+            const bar =
+                document.getElementById(
+                    "progressBar"
+                );
+
+
+            const text =
+                document.getElementById(
+                    "progressText"
+                );
+
+
+            box.style.display =
+                "block";
+
+
+            bar.style.width =
+                "0%";
+
+
+            text.innerText =
+                "Starting backup for "
+                + cloud
+                + "...";
+
+
+            let progress = 0;
+
+
+            const timer =
+                setInterval(() => {
+
+
+                    progress += 20;
+
+
+                    bar.style.width =
+                        progress + "%";
+
+
+                    text.innerText =
+                        "Backup in progress: "
+                        + progress
+                        + "%";
+
+
+                    if (progress >= 100) {
+
+
+                        clearInterval(timer);
+
+
+                        text.innerText =
+                            "✓ Backup completed successfully";
+
+
+                        updateCloudStatus(
+                            cloud
+                        );
+
+
+                        addActivity(
+                            "Backup completed for "
+                            + cloud
+                        );
+
+
+                        showNotification(
+                            "Backup completed!"
+                        );
+
+
+                    }
+
+
+                }, 500);
+
+        }
+
+
+        /* =====================================================
+           UPDATE CLOUD STATUS
+        ====================================================== */
+
+        function updateCloudStatus(
+            cloud
+        ) {
+
+
+            const now =
+                new Date().toLocaleTimeString(
+                    [],
+                    {
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    }
+                );
+
+
+            if (
+                cloud === "All Clouds"
+            ) {
+
+
+                updateSingleCloud(
+                    "AWS",
+                    now
+                );
+
+
+                updateSingleCloud(
+                    "Azure",
+                    now
+                );
+
+
+                updateSingleCloud(
+                    "Google Cloud",
+                    now
+                );
+
+
+                document
+                    .getElementById(
+                        "completedCount"
+                    )
+                    .innerText = "3";
+
+
+                return;
+
+            }
+
+
+            updateSingleCloud(
+                cloud,
+                now
+            );
+
+        }
+
+
+        /* =====================================================
+           UPDATE INDIVIDUAL CLOUD
+        ====================================================== */
+
+        function updateSingleCloud(
+            cloud,
+            time
+        ) {
+
+
+            let id =
+                cloud;
+
+
+            if (
+                cloud === "Google Cloud"
+            ) {
+
+                id =
+                    "GoogleCloud";
+
+            }
+
+
+            const status =
+                document.getElementById(
+                    id + "-status"
+                );
+
+
+            const timeElement =
+                document.getElementById(
+                    id + "-time"
+                );
+
+
+            if (status) {
+
+                status.innerHTML =
+                    "✓ Backup Completed";
+
+            }
+
+
+            if (timeElement) {
+
+                timeElement.innerText =
+                    "Last backup: "
+                    + time;
+
+            }
+
+        }
+
+
+        /* =====================================================
+           START CONFIGURED BACKUP
+        ====================================================== */
+
+        async function startConfiguredBackup() {
+
+
+            const organization =
+                document
+                    .getElementById(
+                        "organization"
+                    )
+                    .value
+                    .trim();
+
+
+            const source =
+                document
+                    .getElementById(
+                        "backupSource"
+                    )
+                    .value
+                    .trim();
+
+
+            const primary =
+                document
+                    .getElementById(
+                        "primaryCloud"
+                    )
+                    .value;
+
+
+            const secondary =
+                document
+                    .getElementById(
+                        "secondaryCloud"
+                    )
+                    .value;
+
+
+            const backupType =
+                document
+                    .getElementById(
+                        "backupType"
+                    )
+                    .value;
+
+
+            const schedule =
+                document
+                    .getElementById(
+                        "schedule"
+                    )
+                    .value;
+
+
+            const encryption =
+                document
+                    .getElementById(
+                        "encryption"
+                    )
+                    .value;
+
+
+            const retention =
+                document
+                    .getElementById(
+                        "retention"
+                    )
+                    .value;
+
+
+            const result =
+                document
+                    .getElementById(
+                        "configurationResult"
+                    );
+
+
+            /* VALIDATION */
+
+            if (
+                !organization ||
+                !source
+            ) {
+
+
+                result.style.display =
+                    "block";
+
+
+                result.className =
+                    "health configuration-error";
+
+
+                result.innerHTML =
+
+                    "<strong>⚠ Please enter:</strong>"
+                    + "<br><br>"
+                    + "• Organization Name"
+                    + "<br>"
+                    + "• Backup Source";
+
+
+                return;
+
+            }
+
+
+            /* SHOW CONFIGURATION */
+
+            result.style.display =
+                "block";
+
+
+            result.className =
+                "health configuration-success";
+
+
+            result.innerHTML = `
+
+                <h3>
+                    ✓ Backup Configuration Created
+                </h3>
+
+                <p>
+                    <strong>Organization:</strong>
+                    ${organization}
+                </p>
+
+                <p>
+                    <strong>Backup Source:</strong>
+                    ${source}
+                </p>
+
+                <p>
+                    <strong>Primary Cloud:</strong>
+                    ${primary}
+                </p>
+
+                <p>
+                    <strong>Secondary Cloud:</strong>
+                    ${secondary}
+                </p>
+
+                <p>
+                    <strong>Backup Type:</strong>
+                    ${backupType}
+                </p>
+
+                <p>
+                    <strong>Schedule:</strong>
+                    ${schedule}
+                </p>
+
+                <p>
+                    <strong>Encryption:</strong>
+                    ${encryption}
+                </p>
+
+                <p>
+                    <strong>Retention:</strong>
+                    ${retention}
+                </p>
+
+                <hr>
+
+                <p>
+                    🚀 Starting backup workflow...
+                </p>
+
+            `;
+
+
+            showNotification(
+                "Backup configuration created"
+            );
+
+
+            /* SELECT PRIMARY CLOUD */
+
+            selectCloud(
+                primary
+            );
+
+
+            /* START BACKUP */
+
+            performBackup(
+                primary
+            );
+
+
+            /* ADD ACTIVITY */
+
+            addActivity(
+                backupType
+                + " configured for "
+                + organization
+            );
+
+        }
+
+
+        /* =====================================================
+           RESET CONFIGURATION
+        ====================================================== */
+
+        function resetConfiguration() {
+
+
+            document
+                .getElementById(
+                    "organization"
+                )
+                .value = "";
+
+
+            document
+                .getElementById(
+                    "backupSource"
+                )
+                .value = "";
+
+
+            document
+                .getElementById(
+                    "primaryCloud"
+                )
+                .value = "AWS";
+
+
+            document
+                .getElementById(
+                    "secondaryCloud"
+                )
+                .value = "Azure";
+
+
+            document
+                .getElementById(
+                    "backupType"
+                )
+                .value =
+                "Full Backup";
+
+
+            document
+                .getElementById(
+                    "schedule"
+                )
+                .value =
+                "Daily";
+
+
+            document
+                .getElementById(
+                    "encryption"
+                )
+                .value =
+                "Enabled";
+
+
+            document
+                .getElementById(
+                    "retention"
+                )
+                .value =
+                "7 Days";
+
+
+            document
+                .getElementById(
+                    "configurationResult"
+                )
+                .style.display =
+                "none";
+
+
+            showNotification(
+                "Configuration reset"
+            );
+
+        }
+
+
+        /* =====================================================
+           DISASTER RECOVERY TEST
+        ====================================================== */
+
+        function testRecovery() {
+
+
+            const status =
+                document
+                    .getElementById(
+                        "recoveryStatus"
+                    );
+
+
+            const message =
+                document
+                    .getElementById(
+                        "recoveryMessage"
+                    );
+
+
+            status.innerText =
+                "Testing...";
+
+
+            status.style.color =
+                "#2563eb";
+
+
+            message.innerText =
+                "⏳ Running disaster recovery simulation...";
+
+
+            setTimeout(() => {
+
+
+                status.innerText =
+                    "Ready";
+
+
+                status.style.color =
+                    "#16a34a";
+
+
+                message.innerText =
+                    "✓ Recovery simulation completed successfully.";
+
+
+                addActivity(
+                    "Disaster recovery test completed"
+                );
+
+
+                showNotification(
+                    "Recovery test successful"
+                );
+
+
+            }, 2500);
+
+        }
+
+
+        /* =====================================================
+           ADD ACTIVITY
+        ====================================================== */
+
+        function addActivity(
+            message
+        ) {
+
+
+            const activity =
+                document.getElementById(
+                    "activity"
+                );
+
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+
+            item.className =
+                "activity-item";
+
+
+            item.innerHTML =
+
+                '<span class="badge">'
+                + 'SUCCESS'
+                + '</span>'
+                + message;
+
+
+            activity.prepend(
+                item
+            );
+
+        }
+
+
+        /* =====================================================
+           REFRESH DASHBOARD
+        ====================================================== */
+
+        function refreshDashboard() {
+
+
+            checkHealth();
+
+
+            showNotification(
+                "Dashboard refreshed"
+            );
+
+        }
+
+
+        /* =====================================================
+           NOTIFICATION
+        ====================================================== */
+
+        function showNotification(
+            message
+        ) {
+
+
+            const notification =
+                document.getElementById(
+                    "notification"
+                );
+
+
+            notification.innerText =
+                message;
+
+
+            notification.style.display =
+                "block";
+
+
+            setTimeout(() => {
+
+
+                notification.style.display =
+                    "none";
+
+
+            }, 2500);
+
+        }
+
+    </script>
 
 </body>
+
 </html>
